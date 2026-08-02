@@ -69,6 +69,19 @@ HanaAgent 会把不同类型的工作交给不同模型。不要把它们全当�
 
 视觉模型相关问题最常见的原因有两个：模型卡片里“视觉/支持图片”能力被误关，或设置 → 供应商里的辅助视觉开关没有打开。
 
+```mermaid
+flowchart TB
+    A[收到任务] --> B{按任务类型分工}
+    B --> C[聊天模型：主对话、分析、写作]
+    B --> D[轻量实用模型：摘要、分类、轻任务]
+    B --> E[重型实用模型：记忆编译、深度处理]
+    B --> F[视觉模型：图片、截图、附件理解]
+    C --> G[可验证的任务交付]
+    D --> G
+    E --> G
+    F --> G
+```
+
 ### 1.2 给 Agent 一个工作文件夹
 
 在欢迎页或 **设置 → 工作台** 为当前 Agent 设置工作目录。这是她的书桌。
@@ -132,6 +145,18 @@ HanaAgent 会把不同类型的工作交给不同模型。不要把它们全当�
 | Experience / Skill | 重复任务的工作方法、纠错经验 | 每次都不同的具体内容 |
 
 Yuan 决定她怎么想，ishiki 决定她是谁。两者不要混在一起。
+
+```mermaid
+flowchart TB
+    A[Yuan：思考方式与人格底座] --> B[ishiki.md：身份、语气、价值与边界]
+    B --> C[记忆与置顶：稳定偏好和长期事实]
+    C --> D[Experience / Skill：重复任务的方法与纠错]
+    E[当前任务：目标、材料、交付、边界] --> F[本次协作行为]
+    A --> F
+    B --> F
+    C --> F
+    D --> F
+```
 
 ### 2.2 一版耐用的 ishiki 骨架
 
@@ -223,6 +248,16 @@ flowchart LR
 
 ### 3.2 文件协作的正确节奏
 
+```mermaid
+flowchart LR
+    A[工作文件夹 / 附件] --> B[只读诊断]
+    B --> C[计划与影响范围]
+    C --> D{确认后再动手}
+    D --> E[编辑、运行或生成文件]
+    E --> F[验证结果与剩余风险]
+    F --> G[交付到约定输出目录]
+```
+
 1. 先让她诊断或阅读。
 2. 让她给出计划和影响范围。
 3. 你确认后，再让她编辑、运行命令或生成文件。
@@ -250,6 +285,17 @@ flowchart LR
 | MCP | 把外部服务接进 Hana 的标准连接器 | 数据库、知识库、第三方 API |
 
 Plugin 分为 Restricted 和 Full-access。后者可以注册更深层能力，安装前要认真看权限。
+
+```mermaid
+flowchart TB
+    A[任务缺少某种能力] --> B{先判断缺什么}
+    B --> C[Skill：需要稳定流程或知识]
+    B --> D[Plugin：需要新工具、页面或 Provider]
+    B --> E[MCP：需要接入外部服务]
+    C --> F[为指定 Agent 启用]
+    D --> G[审查权限后安装]
+    E --> H[按需配置连接器与工具范围]
+```
 
 ### 4.2 内置 Office 与 PDF
 
@@ -307,6 +353,16 @@ MCP 是将外部系统接入 Agent 的标准协议。HanaAgent 可以在设置�
 ---
 
 ## 5. 自动化、Bridge 与远程访问
+
+```mermaid
+flowchart TB
+    A[HanaAgent Server：会话、Agent、文件与访问控制] --> B[本机桌面]
+    A --> C[手机 PWA / LAN 前端]
+    A --> D[Bridge：微信、QQ、飞书、Telegram]
+    B --> E[工作台与本地文件]
+    C --> F[设备密钥与可撤销访问]
+    D --> G[Owner 身份与远程接管]
+```
 
 ### 5.1 定时任务与巡检
 
@@ -375,6 +431,17 @@ Bridge 让你在手机上继续和 Agent 对话，但必须先处理 Owner。
 - Token 预算、并发上限、重试、节点/全局超时。
 - 失败后按运行 ID 断点续跑，已完成节点可复用缓存。
 
+```mermaid
+flowchart LR
+    A[主 Agent：拆分目标与预算] --> B[资料检索：只读]
+    A --> C[反例检查：只读]
+    A --> D[结论整理：只读或受限写入]
+    B --> E[整合与分歧说明]
+    C --> E
+    D --> E
+    E --> F[可验证的最终交付]
+```
+
 它默认关闭是合理的：一次工作流可能并行启动多个 Agent，成本和工具调用量都会上升；写入节点必须指定受限的可写目录。
 
 可以这样对 Agent 说：
@@ -442,6 +509,15 @@ hana data restore <transitionId>
 
 ## 7. 安全边界与每周维护
 
+```mermaid
+flowchart LR
+    A[识别任务动作] --> B{只读、编辑、命令或外部动作}
+    B --> C[最小权限分析]
+    C --> D[确认影响范围：输出路径、联网与副作用]
+    D --> E[执行]
+    E --> F[备份、验证与风险说明]
+```
+
 ### 7.1 权限检查清单
 
 - [ ] 分析和阅读资料时，优先使用只读模式。
@@ -494,6 +570,7 @@ hana data restore <transitionId>
 
 - 官方项目：[liliMozi/openhanako](https://github.com/liliMozi/openhanako)
 - 配图来源：HanaAgent 官方公开资源 [banner.jpg](https://github.com/liliMozi/openhanako/blob/main/.github/assets/banner.jpg) 与 [screenshot-main.jpg](https://github.com/liliMozi/openhanako/blob/main/.github/assets/screenshot-main.jpg)，以外链方式引用，未复制二进制图片到本仓库。
+- 图解：功能关系与操作流程使用 GitHub 原生 Mermaid 渲染，分别对应模型分工、Agent 分层、文件协作、扩展选择、远程入口、Workflow 与安全边界。
 - 本手册依据 HanaAgent 内置用户说明、已核实的当前功能和一次本地源码审计整理。
 - 源码审计对应提交：`427821a3c27a03e84370b285065d5fd9d56ddf98`，当时与上游 `main` 分支一致。
 - 本文不把已退役、仅调试或标为“coming soon”的源码路径视为可用功能。
